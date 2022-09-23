@@ -13,33 +13,16 @@ app.use(bodyParser.urlencoded({
     extended: true,
 }));
 
-const transporter = nodemailer.createTransport({
-    host: 'smtp.ethereal.email',
-    port: 587,
-    auth: {
-        user: 'jerome.raynor@ethereal.email',
-        pass: 'ZrjGVN8WTTw9U9bkcN'
+
+let mailOptions = {
+    from: 'Maniflip@yandex.ru', // sender address
+    to: ['lanabanana1861@gmail.com'], // list of receivers
+    subject: 'MoneyFlip form request', // Subject line
+    html: '',
+    headers:{
+        "List-Unsubscribe": "https://se.ifmo.ru/~s283945"
     }
-});
-
-// const mailOptions = {
-//     from: 'jerome.raynor@ethereal.email',
-//     to: 'vica_diana@mail.ru',
-//     subject: 'Money-Flip',
-//     text: "This is my first email. I am so excited!"
-// };
-
-app.post('/sendMail', (request, response) => {
-    console.log(`URL: ${request.url}`);
-    console.log(request.body);
-    transporter.sendMail(mailOptions, (error, info) => {
-        if (error) {
-            return console.log('error:', error.message);
-        }
-        console.log("success", info);
-    });
-});
-
+};
 
 let smtpTransport;
 try {
@@ -48,29 +31,39 @@ try {
         port: 465,
         secure: true, // true for 465, false for other ports 587
         auth: {
-            user: "diana.inya@yandex.ru",
-            pass: "Da_trash1448!"
+            user: "Maniflip@yandex.ru",
+            pass: "Wutang4ever)"
         }
     });
 } catch (e) {
     return console.log('Error: ' + e.name + ":" + e.message);
 }
 
-let mailOptions = {
-    from: 'diana.inya@yandex.ru', // sender address
-    to: 'vica_diana@mail.ru', // list of receivers
-    subject: 'Обращение с сайта baedeker.club', // Subject line
-    text: 'Обращение с сайта baedeker.club', // plain text body
-};
+app.post('/sendMail', (request, response) => {
+    console.log(`URL: ${request.url}`);
+    console.log(request.body);
 
-smtpTransport.sendMail(mailOptions, (error, info) => {
-    if (error) {
-        // return console.log(error);
-        return console.log('Error', error);
-    } else {
-        console.log('Message sent: %s', info.messageId);
-    }
-})
+    mailOptions.html =
+        `<div><b>Отправление:</b> ${request.body.sendAmount} ${request.body.sendBank}</div>
+    <div><b>IBAN или номер счета:</b> ${request.body.account}</div>
+    <br/>
+    <div><b>Имя:</b> ${request.body.name}</div>
+    <div><b>Телефон:</b> <a href="tel:+${request.body.phone}">${request.body.phone}</a></div>
+    <div><b>Телеграм:</b> <a href="https://telegram.im/@${request.body.telegram.replace("@", '')}">${request.body.telegram}</a></div>
+    <div><b>Статус:</b> ${request.body.person}</div>
+    <div><b>Комментарий:</b> ${request.body.comment}</div>`
+
+    // smtpTransport.sendMail(mailOptions, (error, info) => {
+    //     if (error) {
+    //         response.sendStatus(500)
+    //         return console.log('Error', error);
+    //     } else {
+    //         response.sendStatus(200);
+    //         console.log('Message sent: %s', info.messageId);
+    //     }
+    // })
+});
+
 
 const server = app.listen(port, (error) => {
     if (error) return console.log(`Error: ${error}`);

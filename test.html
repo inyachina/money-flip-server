@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<div>
+    <script>
+        `<div><b>Отправление:</b> ${request.body.sendAmount} ${request.body.sendBank}</div>
+    <div><b>IBAN или номер счета:</b> ${request.body.account}</div>
+    <br/>
+    <div><b>Имя:</b> ${request.body.name}</div>
+    <div><b>Телефон:</b> <a href="tel:+${request.body.phone}">${request.body.phone}</a></div>
+    <div><b>Телеграм:</b> <a href="https://telegram.im/@${request.body.telegram.replace("@", '')}">${request.body.telegram}</a></div>
+    <div><b>Статус:</b> ${request.body.person}</div>
+    <div><b>Комментарий:</b> ${request.body.comment}</div>`
+    </script>
+</div>
+</body>
+</html>
